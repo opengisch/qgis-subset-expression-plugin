@@ -46,12 +46,12 @@ class ConfigWidget(QgsOptionsPageWidget):
         for row in range(len(vector_layers)):
             l = vector_layers[row]
             check_item = QTableWidgetItem()
-            check_item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEditable | Qt.ItemIsEnabled)
-            check_item.setCheckState(Qt.Checked if l.customProperty('subset_expression_checked', 0) == 1 else Qt.Unchecked)
+            check_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsEnabled)
+            check_item.setCheckState(Qt.CheckState.Checked if l.customProperty('subset_expression_checked', 0) == 1 else Qt.CheckState.Unchecked)
             name_item = QTableWidgetItem(l.name())
-            name_item.setFlags(Qt.NoItemFlags)
+            name_item.setFlags(Qt.ItemFlag.NoItemFlags)
             filter_subset_item = QTableWidgetItem(l.subsetString())
-            filter_subset_item.setFlags(Qt.NoItemFlags)
+            filter_subset_item.setFlags(Qt.ItemFlag.NoItemFlags)
             filter_subset_item.layer = l
             subset_item = QTableWidgetItem(l.customProperty('subset_expression', l.subsetString()))
             self.mLayerTableWidget.setItem(row, 0, check_item)
@@ -74,8 +74,8 @@ class ConfigWidget(QgsOptionsPageWidget):
     def apply(self):
 
         for row in range(len(self.vector_layers)):
-            exp_checked = 1 if self.mLayerTableWidget.item(row, 0).checkState() == Qt.Checked else 0
-            exp_text = self.mLayerTableWidget.item(row, 2).data(Qt.DisplayRole).strip()
+            exp_checked = 1 if self.mLayerTableWidget.item(row, 0).checkState() == Qt.CheckState.Checked else 0
+            exp_text = self.mLayerTableWidget.item(row, 2).text().strip()
             layer = self.vector_layers[row]
             store_subset_expression(layer, exp_text, exp_checked, self.iface)
 
@@ -84,6 +84,6 @@ class ConfigWidget(QgsOptionsPageWidget):
 
         for row in range(self.mLayerTableWidget.rowCount()):
             item = self.mLayerTableWidget.item(row, 0)
-            item.setCheckState(Qt.Checked if item.checkState() != Qt.Checked else Qt.Unchecked)
+            item.setCheckState(Qt.CheckState.Checked if item.checkState() != Qt.CheckState.Checked else Qt.CheckState.Unchecked)
 
 

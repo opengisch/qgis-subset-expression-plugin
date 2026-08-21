@@ -72,7 +72,7 @@ class SubsetExpression(object):
         if current_subset_expression != '':
             if layer.subsetString() != current_subset_expression:
                 layer.setCustomProperty('subset_expression_checked', 0)
-                notify(self.iface, _tr("Warning"), _tr("The dynamic provider filter for layer <b>{}</b> has been disabled because it was manually overridden to <tt>{}</tt>)".format(layer.name(), layer.subsetString())), level=Qgis.Warning)
+                notify(self.iface, _tr("Warning"), _tr("The dynamic provider filter for layer <b>{}</b> has been disabled because it was manually overridden to <tt>{}</tt>)".format(layer.name(), layer.subsetString())), level=Qgis.MessageLevel.Warning)
 
 
 if __name__ == "__main__":

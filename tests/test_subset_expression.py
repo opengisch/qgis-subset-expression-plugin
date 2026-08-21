@@ -23,6 +23,7 @@ from qgis.PyQt.QtCore import QTemporaryDir
 from qgis.testing import TestCase, start_app
 from qgis.testing.mocked import get_iface
 from qgis import utils as qgis_utils
+import utils
 
 sys.path.append(
     str(Path(os.path.dirname(__file__)).parent.absolute().parent.absolute()))
