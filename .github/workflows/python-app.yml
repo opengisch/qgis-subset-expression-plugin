@@ -3,12 +3,19 @@
 
 name: Subset Expression Plugin CI tests
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
 
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+          qgis_repo: ['ubuntu-ltr', 'ubuntu']
 
     steps:
     - uses: actions/checkout@v2
@@ -23,7 +30,7 @@ jobs:
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
         sudo wget -qO - https://qgis.org/downloads/qgis-2022.gpg.key | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/qgis-archive.gpg --import
         sudo chmod a+r /etc/apt/trusted.gpg.d/qgis-archive.gpg
-        sudo sh -c 'echo "deb [arch=amd64] https://qgis.org/ubuntu-ltr focal main" >> /etc/apt/sources.list'
+        sudo sh -c 'echo "deb [arch=amd64] https://qgis.org/${{ matrix.qgis_repo }} noble main" >> /etc/apt/sources.list'
         sudo apt update
         sudo apt install qgis xvfb
     - name: Lint with flake8
@@ -34,22 +41,24 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        xvfb-run pytest --forked -v
-    - name: Prepare artifact
-      run: |
-        git archive --prefix qgis-subset-expression-plugin/qgis-subset-expression-plugin/ --format=zip -o qgis-subset-expression-plugin.zip ${{ github.sha }}
-        unzip qgis-subset-expression-plugin.zip
-        # Remove unneded files
-        rm -rf qgis-subset-expression-plugin/qgis-subset-expression-plugin/.github
-        rm -rf qgis-subset-expression-plugin/qgis-subset-expression-plugin/.gitignore
-        rm -rf qgis-subset-expression-plugin/qgis-subset-expression-plugin/tests
-    - uses: actions/upload-artifact@v2
-      with:
-        name: qgis-subset-expression-plugin
-        path: ./qgis-subset-expression-plugin
-    #- name: Setup tmate session
-    #  if: ${{ failure() }}
-    #  uses: mxschmitt/action-tmate@v3
-    #  with:
-    #    limit-access-to-actor: true
+        xvfb-run pytest -v
 
+  release:
+    runs-on: ubuntu-24.04
+    env:
+      QGIS_TOKEN: ${{ secrets.QGIS_ORG_PLUGIN_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RELEASE_VERSION: ${{ github.event.release.tag_name }}
+    if: ${{ github.event_name == 'release' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: |
+          sudo apt update && sudo apt install qtbase5-dev qttools5-dev-tools
+          sudo pip install qgis-plugin-ci
+      - name: Release
+        run: |
+          qgis-plugin-ci release ${RELEASE_VERSION} --github-token ${GITHUB_TOKEN} --qgis-token ${QGIS_TOKEN}

@@ -2,7 +2,7 @@
 name:Dynamic Provider Filter Plugin
 description:QGIS plugin to dynamically set provider filters using QGIS variable replacement.
 
-version:2.0
+version:dev
 qgisMinimumVersion:3.0
 qgisMaximumVersion=4.99
 experimental:False
