@@ -1,23 +1,19 @@
 [general]
-name:Dynamic Provider Filter Plugin
-description:QGIS plugin to dynamically set provider filters using QGIS variable replacement.
-
-version:dev
-qgisMinimumVersion:3.0
+name=Dynamic Provider Filter Plugin
+description=QGIS plugin to dynamically set provider filters using QGIS variable replacement.
+version=dev
+qgisMinimumVersion=3.0
 qgisMaximumVersion=4.99
-experimental:False
-homepage:https://github.com/opengisch/qgis-subset-expression-plugin
-repository:https://github.com/opengisch/qgis-subset-expression-plugin
-tracker:https://github.com/opengisch/qgis-subset-expression-plugin/issues
-about:QGIS plugin to dynamically set provider filters using QGIS variable replacement.
-
-changelog:
+experimental=False
+homepage=https://github.com/opengisch/qgis-subset-expression-plugin
+repository=https://github.com/opengisch/qgis-subset-expression-plugin
+tracker=https://github.com/opengisch/qgis-subset-expression-plugin/issues
+about=QGIS plugin to dynamically set provider filters using QGIS variable replacement.
+icon=icons/mActionFilter2.svg
+email=apasotti@gmail.com
+author=Alessandro Pasotti
+changelog=
     Version 1.0:
     * Initial implementation
     Version 2.0:
     * QGIS 4 support
-
-
-icon:icons/mActionFilter2.svg
-email:apasotti@gmail.com
-author:Alessandro Pasotti
