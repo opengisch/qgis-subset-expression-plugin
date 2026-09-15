@@ -72,7 +72,7 @@ def get_subset_expression(layer) -> str:
     return ''
 
 
-def notify(iface, title, message, level=Qgis.Info):
+def notify(iface, title, message, level=Qgis.MessageLevel.Info):
     """Push message on message bar and log it"""
 
     iface.messageBar().pushMessage(title, message, level)
@@ -100,7 +100,7 @@ def set_subset_expression(layer, exp_text, iface) -> bool:
         for exp_var in var_list:
             if not ctx.hasVariable(exp_var):
                 notify(iface, _tr("Notice"), _tr("Layer <b>{}</b> dynamic provider filter definition <tt>{}</tt> is invalid: variable <tt>@{}</tt> is not defined! Provider filter was not changed.").format(layer.name(), exp_text,
-                exp_var), level=Qgis.Warning)
+                exp_var), level=Qgis.MessageLevel.Warning)
                 return False
 
         for var in var_list:
@@ -110,10 +110,10 @@ def set_subset_expression(layer, exp_text, iface) -> bool:
             return False
 
         if layer.setSubsetString(exp_text):
-            notify(iface, _tr("Notice"), _tr("Layer <b>{}</b> provider filter was changed to: <tt>{}</tt>").format(layer.name(), exp_text), level=Qgis.Success)
+            notify(iface, _tr("Notice"), _tr("Layer <b>{}</b> provider filter was changed to: <tt>{}</tt>").format(layer.name(), exp_text), level=Qgis.MessageLevel.Success)
             return True
         else:
-            notify(iface, _tr("Error"), _tr("Error setting provider filter for layer <b>{}</b> to <tt>{}</tt>").format(layer.name(), exp_text), level=Qgis.Critical)
+            notify(iface, _tr("Error"), _tr("Error setting provider filter for layer <b>{}</b> to <tt>{}</tt>").format(layer.name(), exp_text), level=Qgis.MessageLevel.Critical)
             return False
 
     return False
